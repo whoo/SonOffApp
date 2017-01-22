@@ -9,3 +9,9 @@ sntp.sync('129.6.15.28',
   end
 )
 end
+
+function time()
+  local tm
+  tm = rtctime.epoch2cal(rtctime.get())
+  print(string.format("%04d/%02d/%02d %02d:%02d:%02d", tm["year"], tm["mon"], tm["day"], tm["hour"], tm["min"], tm["sec"]))
+end
