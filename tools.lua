@@ -19,11 +19,7 @@ function getfn(action)
     end
 end
 
-function time()
-  local tm
-  tm = rtctime.epoch2cal(rtctime.get())
-  print(string.format("%04d/%02d/%02d %02d:%02d:%02d", tm["year"], tm["mon"], tm["day"], tm["hour"], tm["min"], tm["sec"]))
-end
+
 
 function setoff() set(relayPin,"0") end
 function seton() set(relayPin,"1") end
@@ -95,26 +91,3 @@ file.close()
 end
 
 --- File tools
-
-function catfile(name)
-  if file.open(name,"r") then
-    while true do
-      local line=file.readline()
-      if (line==nil) then file.close() break end
-      print(line)
-    end
-  end
-end
-
-function appendf(name,data)
-  file.open(name,"a")
-  file.writeline(data)
-  file.close()
-end
-
-function ls()
-local l = file.list();
-  for k,v in pairs(l) do
-  print("name:"..k..", size:"..v)
-  end
-end

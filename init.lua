@@ -16,7 +16,7 @@ gpio.mode(relayPin, gpio.OUTPUT)
 
 gpio.write(led,gpio.HIGH)
 gpio.write(relayPin,gpio.LOW)
-
+dofile("telnet.lc")
 
 function mess(con,topic,data)
   sblink()
@@ -53,7 +53,7 @@ end
 
 --- start
 
-dofile("telnet.lc")
+
 
 if (gpio.read(3)==gpio.LOW)
 then
@@ -82,7 +82,7 @@ end
 )
 
 
-m = mqtt.Client("dd",120,"dd","dd")
+_G.m = mqtt.Client("dd",120,"dd","dd")
 
 tmr.alarm(0,250,tmr.ALARM_AUTO,sblink)
 tmr.alarm(1, 5000, tmr.ALARM_SINGLE, function()

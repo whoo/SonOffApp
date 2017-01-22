@@ -30,6 +30,9 @@ conf.lua
 ## Upload code
 Via [nodemcu-uploader.py](https://github.com/kmpm/nodemcu-uploader) or upload.sh
 
+## Mosquitto / Mqtt
+Use private server or public server to manage device
+
 ## Docs
 * https://www.itead.cc/sonoff-wifi-wireless-switch.html
 * https://randomnerdtutorials.com/how-to-flash-a-custom-firmware-to-sonoff/
