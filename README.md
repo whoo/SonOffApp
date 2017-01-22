@@ -29,7 +29,7 @@ conf.lua
 ## Upload code
 via nodemcu-uploader.py or upload.sh
 
-## Documentations
+## Docs
 * https://www.itead.cc/sonoff-wifi-wireless-switch.html
 * https://randomnerdtutorials.com/how-to-flash-a-custom-firmware-to-sonoff/
 * https://github.com/espressif/esptool
