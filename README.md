@@ -1,6 +1,7 @@
 # SonOff APP
 *Based on NodeMCU*
 
+![sonoff](https://cdn.itead.cc/media/catalog/product/cache/1/image/400x400/9df78eab33525d08d6e5fb8d27136e95/s/o/sonoff_01.jpg)
 
 ## Build NodeMCU
 * with your own with docker https://hub.docker.com/r/marcelstoer/nodemcu-build/
@@ -10,7 +11,7 @@ D'ont forget to tweak in app/include/user_modules.h.
 
 
 ## Flash device
-* Wire your device (only USB to avoid fry)
+* Wire your device (only USB to avoid frying)
   * Square is Vcc 3.3
   * RX
   * TX
@@ -27,9 +28,10 @@ D'ont forget to tweak in app/include/user_modules.h.
 conf.lua
 
 ## Upload code
-via nodemcu-uploader.py or upload.sh
+Via [nodemcu-uploader.py](https://github.com/kmpm/nodemcu-uploader) or upload.sh
 
 ## Docs
 * https://www.itead.cc/sonoff-wifi-wireless-switch.html
 * https://randomnerdtutorials.com/how-to-flash-a-custom-firmware-to-sonoff/
 * https://github.com/espressif/esptool
+* https://github.com/kmpm/nodemcu-uploader
