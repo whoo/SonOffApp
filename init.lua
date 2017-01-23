@@ -6,7 +6,7 @@ wifi.setmode(wifi.STATION)
 wifi.sta.config(SSID,PASSWIFI)
 wifi.sta.sethostname(NAME)
 
--- Variable
+-- Variables
 led = 7
 relayPin = 6
 button = 3
