@@ -96,3 +96,16 @@ function erase()
   wifi.sta.config("1","")
   file.remove("conf.lc")
 end
+
+function listap()
+  for k,v in pairs(wifi.sta.getapinfo()) do
+    if (type(v)=="table") then
+      print(" "..k.." : "..type(v))
+      for k,v in pairs(v) do
+        print("\t\t"..k.." : "..v)
+      end
+    else
+      print(" "..k.." : "..v)
+    end
+  end
+end

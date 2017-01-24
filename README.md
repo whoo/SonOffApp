@@ -7,7 +7,7 @@
 * with your own with docker https://hub.docker.com/r/marcelstoer/nodemcu-build/
 D'ont forget to tweak in app/include/user_modules.h.
 * with the cloud platform: https://nodemcu-build.com/
-* Choose dev mode + cron/mqtt/net/snpi/rtctime
+* Choose dev mode + cron/mqtt/net/snpi/rtctime/enduser_setup
 
 
 ## Flash device

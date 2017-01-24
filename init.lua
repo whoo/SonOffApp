@@ -3,27 +3,19 @@ then
 --  print("Setup")
   wifi.setmode(wifi.STATIONAP)
   enduser_setup.manual(false)
-  print("Start Dhcp")
+  print("Start Setup")
   dofile("setup.lc")
 else
-  dofile("conf.lc")
 
-  wifi.setmode(wifi.STATION)
-  wifi.sta.config(SSID,PASSWIFI)
-  wifi.sta.sethostname(NAME)
 
   -- Variables
   led = 7
   relayPin = 6
   button = 3
-
   gpio.mode(led, gpio.OUTPUT)
   gpio.mode(relayPin, gpio.OUTPUT)
-
   gpio.write(led,gpio.HIGH)
   gpio.write(relayPin,gpio.LOW)
-  dofile("telnet.lc")
-
   --- start
 
   if (gpio.read(3)==gpio.LOW)
@@ -34,6 +26,12 @@ else
     dofile("file.lc")
   else
 
+    dofile("conf.lc")
+    wifi.setmode(wifi.STATION)
+    wifi.sta.config(SSID,PASSWIFI)
+    wifi.sta.sethostname(NAME)
+
+    dofile("telnet.lc")
     dofile("tools.lc")
     dofile("time.lc")
     dofile("mqtt.lc")
