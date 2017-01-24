@@ -1,18 +1,23 @@
 function mess(con,topic,data)
   sblink()
   m:publish(NAME.."/status","bzzCom",0,0)
-  if (topic=="switch")  then switch(data)
-  elseif (topic=="timer") then append(data)
-  elseif (topic=="countdown") then countdown(data)
-  elseif (topic=="set") then set(relayPin,data)
-  elseif (topic=="reboot") then
+  if (topic==NAME.."/switch")  then switch(data)
+  elseif (topic==NAME.."/timer") then append(data)
+  elseif (topic==NAME.."/countdown") then countdown(data)
+  elseif (topic==NAME.."/set") then set(relayPin,data)
+  elseif (topic==NAME.."/reboot") then
   m:publish(NAME.."/status","unavailable",0,1)
   node.restart()
   end
 end
 
 function subscr()
-  m:subscribe({timer=0,switch=0,set=0,reboot=0,countdown=0})
+  m:subscribe(NAME.."/set",0)
+  m:subscribe(NAME.."/switch",0)
+  m:subscribe(NAME.."/timer",0)
+  m:subscribe(NAME.."/reboot",0)
+  m:subscribe(NAME.."/countdown",0)
+  m:lwt(NAME.."/status","lost in the desert",0,1)
   m:publish(NAME.."/status","available",0,1)
   m:publish(NAME.."/relais","off",0,1)
   m:on("offline",connect)

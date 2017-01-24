@@ -29,11 +29,16 @@ end
 enduser_setup.start(
     function()
 
-        local a="_G.SSID=\""..wifi.sta.getapinfo()[1].ssi.."\""
-        local b="_G.PASSWIFI=\""..wifi.sta.getapinfo()[1].pwd.."\""
 
-        print("Aie"..wifi.sta.getapinfo()[1].ssid)
-        print("Aie"..wifi.sta.getapinfo()[1].pwd)
+        file.open("conf.lua","w")
+        file.writeline("_G.SSID=\""..wifi.sta.getapinfo()[1].ssid.."\"")
+        file.writeline("_G.PASSWIFI=\""..wifi.sta.getapinfo()[1].pwd.."\"")
+        file.writeline("_G.NAME=\"sonoff\"")
+        file.writeline("_G.MOSQUITO=\"192.168.2.30\"")
+
+
+        file.close()
+        node.compile("conf.lua")
         end,
     function(err, str)
         print("err"..err)

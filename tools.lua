@@ -78,7 +78,7 @@ function loadCron()
     end
     local tmp,tmp,crontime,action=string.find(line,"(.*);(.*)\n")
 --  cron.schedule(cron,getfn(action))
-    -- print("set cron "..crontime.."*"..action)
+    print("set cron "..crontime.."*"..action)
     cron.schedule(crontime,getfn(action))
   end
   end
@@ -90,4 +90,9 @@ file.writeline(mask)
 file.close()
 end
 
---- File tools
+
+function erase()
+  print("Erase")
+  wifi.sta.config("1","")
+  file.remove("conf.lc")
+end
