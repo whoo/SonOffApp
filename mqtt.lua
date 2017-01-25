@@ -5,7 +5,7 @@ function mess(con,topic,data)
   elseif (topic==NAME.."/timer") then append(data)
   elseif (topic==NAME.."/countdown") then countdown(data)
   elseif (topic==NAME.."/set") then set(relayPin,data)
-  elseif (topic==NAME.."/telnet") then
+  elseif (topic==NAME.."/http") then
         _G.srv:close()
         dofile("http.lc")
   elseif (topic==NAME.."/reboot") then
@@ -20,7 +20,7 @@ function subscr()
   m:subscribe(NAME.."/timer",0)
   m:subscribe(NAME.."/reboot",0)
   m:subscribe(NAME.."/countdown",0)
-  m:subscribe(NAME.."/telnet",0)
+  m:subscribe(NAME.."/http",0)
   m:lwt(NAME.."/status","lost in the desert",0,1)
   m:publish(NAME.."/status","available",0,1)
   m:publish(NAME.."/relais","off",0,1)
