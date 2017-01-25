@@ -32,6 +32,6 @@ end
 wifi.sta.getap(apwifi)
 wifi.setmode(wifi.STATIONAP)
 dhcp_config ={}
-dhcp_config.start = "192.168.1.100"
+dhcp_config.start = "192.168.4.5"
 wifi.ap.dhcp.config(dhcp_config)
 wifi.ap.dhcp.start()
