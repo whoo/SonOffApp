@@ -2,7 +2,7 @@ if (not file.exists("conf.lc"))
 then
 --  print("Setup")
   wifi.setmode(wifi.STATIONAP)
-  enduser_setup.manual(false)
+  enduser_setup.manual(true)
   print("Start Setup")
   dofile("setup.lc")
 else

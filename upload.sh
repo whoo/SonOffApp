@@ -3,6 +3,12 @@
 
 
 python2 ../nodemcu-uploader/nodemcu-uploader.py upload *lua --compile
-gzip index.html
-python2 ../nodemcu-uploader/nodemcu-uploader.py upload index.html.gz
-gunzip index.html
+
+
+for a in  *.html 
+do
+gzip $a
+python2 ../nodemcu-uploader/nodemcu-uploader.py upload "$a.gz"
+gunzip $a
+
+done

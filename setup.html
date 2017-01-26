@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+	<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+</head>
+<body>
+
+
+	<div data-role="page" data-transition="slide" id="main">
+		<div data-role="header"  data-theme="b">
+			<h1>Esp config</h1>
+		</div>
+		<div role="main" >
+			<div class="ui-bar ui-bar-b">
+				<div class="ui-field-contain">
+					<input type="text" name="text-1" id="login" value="sonoff" placeholder="sonoff">
+					<select name="select-native-1" id="wifi">
+					</select>
+					<input type="password" data-clear-btn="true" name="password-2" id="password-2" value="" autocomplete="off">
+				</div>
+			</div>
+
+			<hr>
+			<div data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u">
+				<h4>MQTT info</h4>
+				<input type="text" name="text-1" value="192.168.2.30" placeholder="192.168.2.30">
+				<input type="text" name="text-1" value="1883" placeholder="1883">
+				<input type="text" name="text-1" value="none" placeholder="none">
+				<input type="text" name="text-1" value="none" placeholder="none">
+			</div>
+			<hr>
+			<button id="go" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-right ui-icon-check">Go Men</button>
+		</div>
+
+	</div>
+
+	<div data-role="page" data-transition="slide" id="ok">
+		Setup Completed.
+	</div>
+
+	<script>
+	var wifi;
+
+
+	$(function() {
+		$.ajax({url:"/wifi"}).done(function(data) {
+
+			wifi=data.split("\n");
+			wifi.forEach(function(i,index) {
+				$("#wifi").append($('<option>', {
+					value:i,
+					text:i
+				}))
+			});
+		});
+
+
+		$("#go").click(function(e){
+			option={
+				SSID:$("select").val(),
+				NAME:$("input")[0].value,
+				PASSWIFI:$("input")[1].value,
+				MOSQUITO:$("input")[2].value,
+				PORT:$("input")[3].value,
+				USER:$("input")[4].value,
+				PASS:$("input")[5].value,
+			};
+//console.log(option)
+
+		$.get("/push", option,function() {
+			$("body").pagecontainer("change", "#ok");
+		});
+
+		})
+	});
+
+	</script>
+
+</body>
+</html>

@@ -36,5 +36,5 @@ function subscr()
 end
 
 function connect()
-  m:connect(MOSQUITO,1883,0,subscr)
+  m:connect(_G.MOSQUITO,_G.PORT,0,subscr)
 end

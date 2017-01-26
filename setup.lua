@@ -24,14 +24,12 @@ end
 -- )
 
 _G.ap=nil
-function apwifi(t)
-print("wifi ready")
-_G.ap=t
-end
 
-wifi.sta.getap(apwifi)
 wifi.setmode(wifi.STATIONAP)
 dhcp_config ={}
 dhcp_config.start = "192.168.4.5"
 wifi.ap.dhcp.config(dhcp_config)
 wifi.ap.dhcp.start()
+_G.srv=net.createServer(net.TCP,180)
+print("GO")
+dofile("http.lc")
