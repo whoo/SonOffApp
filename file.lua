@@ -29,6 +29,18 @@ function catfile(name)
   end
 end
 
+function fbase64(name)
+  local src=file.open(name,"r")
+  local buf=nil
+  if src then
+    buf = encoder.toBase64(src:read())
+    src:close()
+    src=nil
+  end
+  return buf
+end
+
+
 function appendf(name,data)
   file.open(name,"a")
   file.writeline(data)
@@ -36,8 +48,8 @@ function appendf(name,data)
 end
 
 function ls()
-local l = file.list();
+  local l = file.list();
   for k,v in pairs(l) do
-  print("name:"..k..", size:"..v)
+    print("name:"..k..", size:"..v)
   end
 end
