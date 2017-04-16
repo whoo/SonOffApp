@@ -62,4 +62,5 @@ buf=src:read(2048)
 dst:write(encoder.fromBase64(buf))
 dst:close()
 src:close()
+file.remove("temp.64")
 end

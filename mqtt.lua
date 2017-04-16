@@ -1,6 +1,6 @@
 function mess(con,topic,data)
   sblink()
-  m:publish(ROOT..NAME.."/status","bzzCom",0,0)
+  m:publish(ROOT..NAME.."/status","Action",0,0)
   if (topic==ROOT..NAME.."/switch")  then switch(data)
   elseif (topic==ROOT..NAME.."/timer") then append(data)
   elseif (topic==ROOT..NAME.."/countdown") then countdown(data)
