@@ -5,7 +5,7 @@ function countdown(data)
   local _,_,count,action=string.find(data,"([0-9]*);([a-z]*)")
   if (action) then
     count=tonumber(count)*1000
-    m:publish(NAME.."/status","set timer "..count.." "..action,0,0)
+    m:publish(ROOT..NAME.."/status","set timer "..count.." "..action,0,0)
     tmr.create():alarm(count,tmr.ALARM_SINGLE,getfn(action))
   end
 end
@@ -28,7 +28,7 @@ function set(elm,state)
   local val="off"
   gpio.write(elm,state)
   if (state=="1") then  val="on"  end
-  m:publish(NAME.."/relais",val,0,1)
+  m:publish(ROOT..NAME.."/relais",val,0,1)
 end
 
 -- led
@@ -59,10 +59,10 @@ function switch(elm)
   if (gpio.read(elm)==gpio.HIGH)
   then
     gpio.write(elm,gpio.LOW)
-    m:publish(NAME.."/relais","off",0,1)
+    m:publish(ROOT..NAME.."/relais","off",0,1)
   else
     gpio.write(elm,gpio.HIGH)
-    m:publish(NAME.."/relais","on",0,1)
+    m:publish(ROOT..NAME.."/relais","on",0,1)
   end
 end
 
@@ -78,7 +78,7 @@ function loadCron()
       end
       local tmp,tmp,crontime,action=string.find(line,"(.*);(.*)\n")
       --  cron.schedule(cron,getfn(action))
-      print("set cron "..crontime.."*"..action)
+--      print("set cron "..crontime.."*"..action)
       cron.schedule(crontime,getfn(action))
     end
   end
@@ -95,9 +95,10 @@ function erase()
   print("Erase")
   wifi.sta.config("1","")
   file.remove("conf.lc")
+  file.remove("crontab")
 end
 
-function listap()
+function listwifi()
   for k,v in pairs(wifi.sta.getapinfo()) do
     if (type(v)=="table") then
       print(" "..k.." : "..type(v))
@@ -108,4 +109,14 @@ function listap()
       print(" "..k.." : "..v)
     end
   end
+end
+
+function listap()
+  for k,v in pairs(wifi.ap.getdefaultconfig(true)) do
+      print("   "..k.." :",v)
+  end
+end
+
+function gc()
+	collectgarbage()
 end

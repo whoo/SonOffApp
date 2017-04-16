@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel=stylesheet href=style.css>
+</head>
+<body>
+
+	<div id="main">
+		<div>
+			<h1>Esp config</h1>
+		</div>
+		<div>
+			<div >
+				<div>
+					<input type="text" name="text-1" id="name" value="sonoff" placeholder="sonoff">
+					<select name="select-native-1" id="ssid" class="styled-select slate ">
+					</select>
+					<input type="text" name="password-2" id="passwifi" value="" autocomplete="off">
+				</div>
+			</div>
+
+			<hr>
+			<div>
+				<h4>MQTT info</h4>
+				<input type-"text" id="root" value="" placeholder="Root">
+				<input type="text" id="mosquito" value="192.168.2.30" placeholder="192.168.2.30">
+				<input type="text" id="port" value="1883" placeholder="1883">
+				<label>
+				<input type="checkbox" id="SSL">SSL</label>
+				<input type="text" id="user" value="none" placeholder="none">
+				<input type="text" id="pass" value="none" placeholder="none">
+
+			</div>
+			<hr>
+			<button id="go">Go Men</button>
+		</div>
+
+	</div>
+
+	<div id="ok">
+		Setup Completed.
+	</div>
+
+	<script>
+	var wifi;
+
+function loadXMLDoc() {
+	var xmlhttp = new XMLHttpRequest();
+	xmlhttp.onreadystatechange = function() {
+		if (xmlhttp.readyState == XMLHttpRequest.DONE ) {
+			if (xmlhttp.status == 200) {
+				wifi=xmlhttp.responseText.split("\n");
+				for (a=0;a<wifi.length;a++)
+					document.getElementById("ssid").append(new Option(wifi[a],wifi[a]));
+			}
+		}
+	};
+
+	xmlhttp.open("GET", "wifi", true);
+	xmlhttp.send();
+}
+loadXMLDoc();
+
+d=document;
+d.getElementById('go').onclick=function(){ 
+	option={
+		SSID:d.getElementById("ssid").value,
+		NAME:d.getElementById("name").value,
+		PASSWIFI:d.getElementById("passwifi").value,
+		MOSQUITO:d.getElementById("mosquito").value,
+		PORT:d.getElementById("port").value,
+		USER:d.getElementById("user").value,
+		PASS:d.getElementById("pass").value,
+		ROOT:d.getElementById("root").value,
+		SSL:(d.getElementById("SSL").checked)?"1":"0"
+	};
+
+	out = new Array();
+	for (key in option) { out.push(key + '=' + encodeURIComponent(option[key])); }
+	url="/push?"+out.join('&');
+	var xmlhttp = new XMLHttpRequest();
+	xmlhttp.open("GET",url,false);
+	xmlhttp.send();
+	m=d.getElementById("main");
+	m.parentNode.removeChild(m);
+	d.getElementById("ok").style.display="block";
+
+}
+
+	</script>
+
+</body>
+</html>

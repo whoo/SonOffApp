@@ -53,3 +53,13 @@ function ls()
     print("name:"..k..", size:"..v)
   end
 end
+
+
+function save64(name)
+src=file.open("temp.64","r")
+dst=file.open(name,"w")
+buf=src:read(2048)
+dst:write(encoder.fromBase64(buf))
+dst:close()
+src:close()
+end

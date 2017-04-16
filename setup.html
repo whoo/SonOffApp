@@ -17,20 +17,24 @@
 		<div role="main" >
 			<div class="ui-bar ui-bar-b">
 				<div class="ui-field-contain">
-					<input type="text" name="text-1" id="login" value="sonoff" placeholder="sonoff">
-					<select name="select-native-1" id="wifi">
+					<input type="text" name="text-1" id="name" value="sonoff" placeholder="sonoff">
+					<select name="select-native-1" id="ssid">
 					</select>
-					<input type="password" data-clear-btn="true" name="password-2" id="password-2" value="" autocomplete="off">
+					<input type="password" data-clear-btn="true" name="password-2" id="passwifi" value="" autocomplete="off">
 				</div>
 			</div>
 
 			<hr>
 			<div data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u">
 				<h4>MQTT info</h4>
-				<input type="text" name="text-1" value="192.168.2.30" placeholder="192.168.2.30">
-				<input type="text" name="text-1" value="1883" placeholder="1883">
-				<input type="text" name="text-1" value="none" placeholder="none">
-				<input type="text" name="text-1" value="none" placeholder="none">
+				<input type-"text" id="root" value="" placeholder="Root">
+				<input type="text" id="mosquito" value="192.168.2.30" placeholder="192.168.2.30">
+				<input type="text" id="port" value="1883" placeholder="1883">
+				<label>
+				<input type="checkbox" id="SSL">SSL</label>
+				<input type="text" id="user" value="none" placeholder="none">
+				<input type="text" id="pass" value="none" placeholder="none">
+
 			</div>
 			<hr>
 			<button id="go" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-right ui-icon-check">Go Men</button>
@@ -51,7 +55,7 @@
 
 			wifi=data.split("\n");
 			wifi.forEach(function(i,index) {
-				$("#wifi").append($('<option>', {
+				$("#ssid").append($('<option>', {
 					value:i,
 					text:i
 				}))
@@ -61,15 +65,17 @@
 
 		$("#go").click(function(e){
 			option={
-				SSID:$("select").val(),
-				NAME:$("input")[0].value,
-				PASSWIFI:$("input")[1].value,
-				MOSQUITO:$("input")[2].value,
-				PORT:$("input")[3].value,
-				USER:$("input")[4].value,
-				PASS:$("input")[5].value,
+				SSID:$("#ssid").val(),
+				NAME:$("#name").val(),
+				PASSWIFI:$("#passwifi").val(),
+				MOSQUITO:$("#mosquito").val(),
+				PORT:$("#port").val(),
+				USER:$("#user").val(),
+				PASS:$("#pass").val(),
+				ROOT:$("#root").val(),
+				SSL:($("#SSL").prop( "checked" ))?"1":"0"
 			};
-//console.log(option)
+console.log(option)
 
 		$.get("/push", option,function() {
 			$("body").pagecontainer("change", "#ok");

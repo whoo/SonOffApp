@@ -24,12 +24,11 @@ end
 -- )
 
 _G.ap=nil
-
 wifi.setmode(wifi.STATIONAP)
 dhcp_config ={}
 dhcp_config.start = "192.168.4.5"
 wifi.ap.dhcp.config(dhcp_config)
 wifi.ap.dhcp.start()
 _G.srv=net.createServer(net.TCP,180)
-print("GO")
+print("GO http server")
 dofile("http.lc")
