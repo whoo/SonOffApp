@@ -5,11 +5,8 @@
 	<link rel=stylesheet href=style.css>
 </head>
 <body>
-
 	<div id="main">
-		<div>
-			<h1>Esp config</h1>
-		</div>
+		<div> <h1>Esp config</h1> </div>
 		<div>
 			<div >
 				<div>
@@ -25,9 +22,8 @@
 				<h4>MQTT info</h4>
 				<input type-"text" id="root" value="" placeholder="Root">
 				<input type="text" id="mosquito" value="192.168.2.30" placeholder="192.168.2.30">
-				<input type="text" id="port" value="1883" placeholder="1883">
-				<label>
-				<input type="checkbox" id="SSL">SSL</label>
+				<input type="text" id="port" value="1883" placeholder="1883"><br/>
+				<label>SSL <input type="checkbox" id="SSL"></label>
 				<input type="text" id="user" value="none" placeholder="none">
 				<input type="text" id="pass" value="none" placeholder="none">
 
@@ -85,7 +81,6 @@ d.getElementById('go').onclick=function(){
 	m=d.getElementById("main");
 	m.parentNode.removeChild(m);
 	d.getElementById("ok").style.display="block";
-
 }
 
 	</script>
