@@ -8,9 +8,19 @@ function checkwifi()
 end
 
 
+-- mytimer = tmr.create()
+-- print(mytimer:state())
+-- mytimer:register(60*1000, tmr.ALARM_AUTO, checkwifi )
+-- mytimer:start()
+--
+--
+--
+function urgence()
+blink()
 mytimer = tmr.create()
-print(mytimer:state())
-mytimer:register(60*1000, tmr.ALARM_AUTO, checkwifi )
+mytimer:register(60*1000, tmr.ALARM_AUTO, function() node.restart() end)
 mytimer:start()
+end
 
 
+wifi.eventmon.register(wifi.eventmon.STA_DISCONNECTED, urgence)

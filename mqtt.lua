@@ -1,17 +1,17 @@
 function mess(con,topic,data)
   sblink()
-  m:publish(ROOT..NAME.."/status","Action",0,0)
+  m:publish(ROOT..NAME.."/status","analyze",0,0)
   if (topic==ROOT..NAME.."/switch")  then switch(data)
   elseif (topic==ROOT..NAME.."/timer") then append(data)
   elseif (topic==ROOT..NAME.."/countdown") then countdown(data)
   elseif (topic==ROOT..NAME.."/set") then set(relayPin,data)
   elseif (topic==ROOT..NAME.."/cronlist") then if (data=="erase") then file.remove("crontab") else m:publish(ROOT..NAME.."/crontab",fbase64("crontab"),0,0) end
-  elseif (topic==ROOT..NAME.."/http") then
-        _G.srv:close()
-        dofile("http.lc")
-  elseif (topic==ROOT..NAME.."/reboot") then
-  m:publish(ROOT..NAME.."/status","unavailable",0,1)
-  node.restart()
+  elseif (topic==ROOT..NAME.."/http") then http()
+  elseif (topic==ROOT..NAME.."/reboot") then m:publish(ROOT..NAME.."/status","unavailable",0,1) node.restart()
+  elseif (topic==ROOT..NAME.."/info") then
+	status="off"
+	if (gpio.read(6)==gpio.HIGH) then status="on" end
+	 m:publish(ROOT..NAME.."/relais",status,0,1)
   end
 end
 
@@ -30,6 +30,7 @@ function subscr()
   m:subscribe(ROOT..NAME.."/countdown",0)
   m:subscribe(ROOT..NAME.."/http",0)
   m:subscribe(ROOT..NAME.."/cronlist",0)
+  m:subscribe(ROOT..NAME.."/info",0)
 --  m:lwt(NAME.."/status","lost in the desert",0,1)
   m:publish(ROOT..NAME.."/status","available",0,1)
   m:publish(ROOT..NAME.."/status","boot",0,0)

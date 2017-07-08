@@ -42,7 +42,7 @@ def uploadgz(name):
     
     print('file.open("temp.64","w")')
     sys.stdout.flush()
-    time.sleep(0.5)
+    time.sleep(0.2)
     f=open(name,"rb")
     buf=base64.b64encode(f.read())
 

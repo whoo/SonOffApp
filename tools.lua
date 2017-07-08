@@ -19,8 +19,6 @@ function getfn(action)
   end
 end
 
-
-
 function setoff() set(relayPin,"0") end
 function seton() set(relayPin,"1") end
 
@@ -56,6 +54,7 @@ end
 
 function switch(elm)
   sblink()
+  m:publish(ROOT..NAME.."/status","switch",0,1)
   if (gpio.read(elm)==gpio.HIGH)
   then
     gpio.write(elm,gpio.LOW)

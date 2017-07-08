@@ -62,3 +62,4 @@ else
 end
 
 print("End Main")
+dofile("test.lc")
