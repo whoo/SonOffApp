@@ -4,6 +4,7 @@
   "display":"standalone",
   "theme_color": "#000000",
   "background_color": "#2196F3",
+  "start_url": "https://whoo.github.io/SonOffApp/",
   "icons": [
     {
       "src": "home-1x.png",
