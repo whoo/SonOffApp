@@ -30,6 +30,8 @@ function catfile(name)
 end
 
 function fbase64(name)
+  
+  if (not file.exists(name)) then return " " end
   local src=file.open(name,"r")
   local buf=nil
   if src then
