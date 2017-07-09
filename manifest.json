@@ -16,6 +16,11 @@
       "sizes": "96x96"
     },
     {
+      "src": "home-3x.png",
+      "type": "image/png",
+      "sizes": "144x144"
+    },
+    {
       "src": "home.png",
       "type": "image/png",
       "sizes": "128x128"
