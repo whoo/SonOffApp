@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>SonOff</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="manifest" href="manifest.json">
+
+  <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+
+  <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+  <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+  <script src="http://www.hivemq.com/demos/websocket-client/js/mqttws31.js"></script>
+  <script src="http://shawnchin.github.io/jquery-cron/cron/jquery-cron.js"></script>
+  <!-- link rel="stylesheet" href="themes/sonoff.min.css" />
+  <link rel="stylesheet" href="themes/jquery.mobile.icons.min.css" / -->
+</head>
+<body>
+
+  <div data-role="page" id="main">
+    <div data-role="header" data-theme="b">
+      <h3>SonOff App</h3>
+      <a href=#setup data-transition="slide" class="ui-btn ui-icon-edit ui-btn-right ui-btn-icon-notext ui-corner-all">Option</a></div>
+      <div role="main" class="ui-content"></div>
+
+      <div data-role="footer"  data-position="fixed" data-theme="b">
+        <a  class="ui-btn ui-icon-delete ui-btn-icon-notext ui-corner-all">No text</a>
+        <span id=log style='font-size:0.8em;'></span>
+      </div>
+    </div>
+    <div data-role="page" id="setup" >
+      <div data-role="header" data-add-back-btn="true" data-theme="b"><h4>SonOff Setup</h4></div>
+      <div role="main" class="ui-content">
+
+        <div class="ui-corner-all custom-corners">
+          <div class="ui-bar ui-bar-a">
+            <h3>Server</h3>
+          </div>
+          <div class="ui-body ui-body-a">
+            <input type="text" name="text-basic" id="server" value="raspberry:9001">
+            <input type="text" name="text-basic" id="user" value="none:none">
+            <input type="text" name="text-basic" id="domain" placeholder="ROOT" value="">
+          </div>
+          <div class="ui-corner-all custom-corners">
+            <div class="ui-bar ui-bar-a">
+              <h3>Switch</h3>
+            </div>
+            <div class="ui-body ui-body-a ui-btn-b">
+              <input type="text" name="device" id="sw0" placeholder="switchName" value="">
+              <input type="text" name="device" id="sw1" placeholder="switchName" value="">
+              <input type="text" name="device" id="sw2" placeholder="switchName" value="">
+              <input type="text" name="device" id="sw3" placeholder="switchName" value="">
+            </div>
+            <input type="button" data-icon="check" id="saveconfig" value="submit">
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div data-role="page" id="config">
+      <div data-role="header" data-add-back-btn="true" data-theme="b"><h3>SonOff Config</h3></div>
+      <input type=hidden id=active>
+      <div role="main" class="ui-content">
+        <div data-role="collapsible" data-theme="b" id="countdown">
+          <h4>CountDown</h4>
+          <div>
+
+            <input type="range" name="slider" id="dure" value="50" min="10" max="3600">
+            <fieldset class="ui-grid-a">
+              <div class="ui-block-a"><input type="checkbox" data-role="flipswitch"  data-theme="b"></div>
+              <div class="ui-block-b"><input id="save_countdown" type="button" data-icon="check"  value="Start"  data-theme="b"></div>
+            </fieldset>
+          </div>
+        </div>
+        <div data-role="collapsible" data-theme="b" id="crontab">
+          <h4>Crontab</h4>
+          <div id="cronselect"  data-role="controlgroup"></div>
+          <input type="text" name="device" id="cronval" placeholder="switchName" value="">
+          <fieldset class="ui-grid-a">
+            <div class="ui-block-a"><input type="checkbox" data-role="flipswitch" data-theme="b"></div>
+            <div class="ui-block-b"><input id="save_cron" type="button" data-icon="check"  value="CronIT" data-theme="b"></div>
+          </fieldset>
+          <hr>
+          <textarea disabled="disabled"></textarea>
+        </div>
+        <div data-role="collapsible" data-theme="b" id="misc">
+          <h4>Misc</h4>
+          <div>
+            <input type=button data-icon="grid" value="Erase">
+            <input type=button data-icon="comment" value="Http">
+            <input type=button data-icon="power" value="Restart">
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+
+  <script>
+  var element;
+  var client;
+  var dd;
+
+
+  $(function(){
+    console.log("Init ...");
+    if ( (location.href.split("#")).length>1)
+    {       location.href=location.href.split("#")[0];     }
+
+    decodeBase64 = function(s) {
+      var e={},i,b=0,c,x,l=0,a,r='',w=String.fromCharCode,L=s.length;
+      var A="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+      for(i=0;i<64;i++){e[A.charAt(i)]=i;}
+      for(x=0;x<L;x++){
+        c=e[s.charAt(x)];b=(b<<6)+c;l+=6;
+        while(l>=8){((a=(b>>>(l-=8))&0xff)||(x<(L-2)))&&(r+=w(a));}
+      }
+      return r;
+    };
+
+    build=function(el){
+      $("#main .ui-content").empty();
+      el.devices.forEach(function(i,v)
+      {
+        d=$('<div class="ui-body ui-body-a ui-corner-all" id=b_'+i+'></div>');
+        l=$('<label>'+i+'</label>');
+        a=$('<input type="checkbox" data-role="flipswitch" name="'+i+'" id="'+i+'">')
+        d.append(l).append(a);
+        a=$('<button class="ui-btn ui-icon-carat-r ui-btn-icon-notext ui-shadow ui-corner-all" style="float:right" />');
+        d.append(a);
+        $("#main .ui-content").append(d);
+      });
+      $("#main .ui-content input:checkbox").flipswitch();
+      $("#main .ui-content input:checkbox").on( 'change', flip);
+      $("#main .ui-content button").on('click',param);
+    }
+
+    param=function(e)
+    {
+      name=e.target.parentElement.id.split('_')[1];
+      $("body").pagecontainer("change", "#config", {transition:'slide'});
+      $("#config h3").html("Sonoff "+name);
+      $("#config  #active").val(name);
+
+    }
+
+    flip=function(e)
+    {
+      val=(e.target.checked==true)*1;
+      name=e.target.id;
+      publish(val.toString(),name+"/set",0)
+    }
+
+
+    var publish = function (payload, topic, qos) {
+      //Send your message (also possible to serialize it as JSON or protobuf or just use a string, no limitations)
+      var message = new Messaging.Message(payload);
+      message.destinationName = topic;
+      message.qos = qos;
+      client.send(message);
+    }
+
+    connect=function(el)
+    {
+
+      client = new Messaging.Client(element.server.split(":")[0],
+      parseInt(element.server.split(":")[1]),
+      Math.random().toString(36).slice(-8));
+      var options = {
+        timeout: 3,
+        onSuccess: function () {
+          console.log("Broker Mqtt Connected");
+          element.devices.forEach(function(i,v) {  $("#sw"+v).val(i);
+          client.subscribe(i+"/#", {qos: 0});
+        });
+      },
+      onFailure: function (message) { console.log("Connection failed: " + message.errorMessage);}
+    };
+    client.connect(options);
+    client.onMessageArrived = parsemessage;
+
+  }
+
+
+  parsemessage=function (message) {
+    //Do something with the push message you received
+    payload=message.payloadString;
+
+    if (payload != 'analyze')
+    $('#log').html('<span>Topic: ' + message.destinationName + '  | ' + payload.slice(0,30)+" (...)" + '</span><br/>');
+
+    d=message.destinationName;
+
+
+    element.devices.forEach(function(i,v){
+      if (i+"/relais" == d) {
+        $("#"+i).off('change');
+        $("#"+i)[0].checked=(payload=="on")?true:false;
+        $("#"+i).flipswitch("refresh").on("change",flip);
+      }
+
+      if (i+"/crontab" == d) {
+        cron=decodeBase64(message.payloadString)
+        $("#config #crontab textarea").val(cron);
+      }
+
+    });
+  };
+
+  /// CountDown ///
+  $("#config #countdown #save_countdown").on("click",function(e) {
+    timer=$("#config #dure").val();
+    action=($("#config #countdown input:checkbox")[0].checked)?"on":"off";
+    name=$("#config #active").val();
+    publish(timer+";"+action,name+"/countdown",0)
+    //$("body").pagecontainer("change","#main");
+    $.mobile.back();
+  });
+
+  $("#config #save_cron").on("click",function(e) {
+    cron=$("#config #cronval").val().split(" ");
+    cron[1]=((parseInt(cron[1])+4)%24).toString();
+    cron=cron.join(" ");
+    action=($("#config #crontab input:checkbox")[0].checked)?"on":"off";
+    name=$("#config #active").val();
+    //console.log(cron+";"+action);
+    publish(cron+";"+action,name+"/timer",0)
+    $.mobile.back();
+  });
+
+  /*$("#config #crontab textarea").on("click",function(){
+    name=$("#config #active").val();
+    publish("1",name+"/cronlist",0);
+  });*/
+
+  $("#config #misc input:button").on("click",function(e){
+    name=$("#config #active").val();
+    if (e.target.value=="Restart")  publish("reboot",name+"/reboot",0);
+    if (e.target.value=="Erase")  publish("erase",name+"/cronlist",0);
+    if (e.target.value=="Http")  publish("startweb",name+"/http",0);
+    $.mobile.back();
+  });
+
+
+  ///// Load Parameter
+  if (localStorage.config) {
+    element= JSON.parse(localStorage.config);
+    console.log("Reading Info");
+    $("#setup #server").val(element.server);
+    $("#setup #user").val(element.user);
+    $("#setup #domain").val(element.domain);
+    element.devices.forEach(function(i,v) {  $("#sw"+v).val(i);  }
+  );
+
+
+  ////Setup Page
+  build(element);
+  connect(element);
+  $('#cronselect').cron(
+    {
+      onChange: function() { $('#cronval').val($(this).cron("value"));
+    }
+  });
+
+  $(document).on("pageshow","#config", function() {
+    $('div[data-role=collapsible]').collapsible( "collapse" );
+    name=$("#config #active").val();
+    publish("1",name+"/cronlist",0);
+  });
+
+}
+
+///////////////
+$("#saveconfig").click(function(e) {
+  el={};
+  device=[];
+  $("#setup input:text").each( function(i,v) {
+    if ($(v).attr('name')== "device")
+    { if ($(v).val() != "") device.push($(v).val()); }
+    else
+    { el[$(v).attr("id")]=$(v).val(); }
+  });
+  el['devices']=device;
+  element=el;
+  localStorage.config=JSON.stringify(el);
+  build(element);
+  $.mobile.back();
+});
+////////////////////////////////
+
+});
+</script>
+
+</html>

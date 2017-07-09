@@ -1,0 +1,24 @@
+{
+  "short_name": "SonOff",
+  "name": "Power your House",
+  "display":"standalone",
+  "theme_color": "#000000",
+  "background_color": "#2196F3",
+  "icons": [
+    {
+      "src": "home-1x.png",
+      "type": "image/png",
+      "sizes": "48x48"
+    },
+    {
+      "src": "home-2x.png",
+      "type": "image/png",
+      "sizes": "96x96"
+    },
+    {
+      "src": "home.png",
+      "type": "image/png",
+      "sizes": "128x128"
+    }
+  ]
+}
