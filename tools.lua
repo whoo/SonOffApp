@@ -92,7 +92,7 @@ end
 
 function erase()
   print("Erase")
-  wifi.sta.config("1","")
+  --wifi.sta.config("1","")
   file.remove("conf.lc")
   file.remove("crontab")
 end

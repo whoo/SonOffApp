@@ -2,10 +2,10 @@
 
 
 
-python2 ../nodemcu-uploader/nodemcu-uploader.py upload *lua --compile
+nodemcu-uploader upload *lua --compile
 
 
-python2 ../nodemcu-uploader/nodemcu-uploader.py upload setup.html.gz style.css.gz
+nodemcu-uploader upload setup.html.gz style.css.gz
 
 #for a in  *.html 
 #do

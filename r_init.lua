@@ -1,8 +1,9 @@
-
+dofile("tools.lc")
+dofile("gpio.lc")
 
 if (not file.exists("conf.lc"))
 then
---  print("Setup")
+  print("Setup")
 -- wifi.setmode(wifi.STATIONAP)
   print("Start Setup")
   enduser_setup.start()
@@ -29,15 +30,16 @@ else
 
     dofile("conf.lc")
     wifi.setmode(wifi.STATION)
-    wifi.sta.config(SSID,PASSWIFI)
+    cc={}
+    cc.ssid=SSID
+    cc.pwd=PASSWIFI
     wifi.sta.sethostname( NAME )
+    wifi.sta.config(cc)
 
 --    dofile("telnet.lc")
-    dofile("tools.lc")
     dofile("time.lc")
     dofile("mqtt.lc")
     dofile("file.lc")
-    dofile("gpio.lc")
 
     m = mqtt.Client( NAME ,120,_G.USER,_G.PASS)
 
@@ -59,7 +61,8 @@ else
     end)
 
   end
+
+dofile("test.lc")
 end
 
 print("End Main")
-dofile("test.lc")
