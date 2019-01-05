@@ -15,5 +15,5 @@ _G.srv:listen(2323,function(c)
       node.output(nil)
       --unregist redirect output function, output goes to serial
     end)
-    print("Welcome to NodeMcu ["..wifi.sta.gethostname().."]")
+    print("Welcome to Switch [[1;33m"..wifi.sta.gethostname().."[0m]")
  end)
