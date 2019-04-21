@@ -10,17 +10,7 @@ function countdown(data)
   end
 end
 
--- Return function on/off
-function getfn(action)
-  if (action=="off")  then
-    return setoff
-  else
-    return seton
-  end
-end
 
-function setoff() set(relayPin,"0") end
-function seton() set(relayPin,"1") end
 
 function set(elm,state)
   local val="off"
@@ -65,23 +55,6 @@ function switch(elm)
   end
 end
 
-function loadCron()
-  local line=nil
-
-  if (file.open("crontab","r")) then
-    while true do
-      line=file.readline()
-      if (line==nil) then
-        file.close()
-        break
-      end
-      local tmp,tmp,crontime,action=string.find(line,"(.*);(.*)\n")
-      --  cron.schedule(cron,getfn(action))
---      print("set cron "..crontime.."*"..action)
-      cron.schedule(crontime,getfn(action))
-    end
-  end
-end
 
 function append(mask)
   file.open("crontab","a")
@@ -89,26 +62,14 @@ function append(mask)
   file.close()
 end
 
-
 function erase()
   print("Erase")
   --wifi.sta.config("1","")
   file.remove("conf.lc")
+  file.remove("conf.lua")
   file.remove("crontab")
 end
 
-function listwifi()
-  for k,v in pairs(wifi.sta.getapinfo()) do
-    if (type(v)=="table") then
-      print(" "..k.." : "..type(v))
-      for k,v in pairs(v) do
-        print("\t\t"..k.." : "..v)
-      end
-    else
-      print(" "..k.." : "..v)
-    end
-  end
-end
 
 function listap()
   for k,v in pairs(wifi.ap.getdefaultconfig(true)) do

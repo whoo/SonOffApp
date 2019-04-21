@@ -2,8 +2,7 @@
 
 
 
-nodemcu-uploader upload *lua --compile
-
+nodemcu-uploader upload *lua --compile -r
 
 nodemcu-uploader upload setup.html.gz style.css.gz
 

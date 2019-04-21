@@ -1,6 +1,5 @@
 _G.Bpress=0
 
-
 gpio.trig(button, "both",function(level)
   local Npress=0
   if (level==0) then
@@ -11,7 +10,6 @@ gpio.trig(button, "both",function(level)
   if (level==1) then
     Npress=(tmr.now()-_G.Bpress)/1000
     tmr.unregister(0)
-
     if (Npress>10000) then erase() end
     if (Npress>50) then switch(relayPin) end
   end

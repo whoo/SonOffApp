@@ -3,9 +3,8 @@ dofile("gpio.lc")
 
 if (not file.exists("conf.lc"))
 then
-  print("Setup")
 -- wifi.setmode(wifi.STATIONAP)
-  print("Start Setup")
+  print("[Setup] no config")
   enduser_setup.start()
   enduser_setup.stop()
   dofile("setup.lc")
@@ -20,14 +19,6 @@ else
   gpio.write(relayPin,gpio.LOW)
   --- start
 
-  if (gpio.read(3)==gpio.LOW)
-  then
-    print("Reset")
-    file.remove("crontab")
-    --  dofile("telnet.lc")
-    dofile("file.lc")
-  else
-
     dofile("conf.lc")
     wifi.setmode(wifi.STATION)
     cc={}
@@ -35,9 +26,8 @@ else
     cc.pwd=PASSWIFI
     wifi.sta.sethostname( NAME )
     wifi.sta.config(cc)
-
---    dofile("telnet.lc")
     dofile("time.lc")
+    dofile("cron.lc")
     dofile("mqtt.lc")
     dofile("file.lc")
 
@@ -56,13 +46,10 @@ else
 --	else
 --	print("restart due to error")
 --	tmr.alarm(0,10000,tmr.ALARM_SINGLE, function() node.restart() end)
-
       end
     end)
-
-  end
 
 dofile("test.lc")
 end
 
-print("End Main")
+print("[Start] End Main")

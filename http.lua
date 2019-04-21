@@ -20,11 +20,11 @@ _G.srv:listen(80,function(conn)
 
 
 
-if (path=="setup")             then if file.open("setup.html.gz","r") then buf=zip..file.read(2048) file.close() end
+if (path=="setup")          then if file.open("setup.html.gz","r") then buf=zip..file.read(2048) file.close() end
 elseif (path=="wifi")       then for a in pairs(_G.ap) do buf=buf..a.."\n" end
-elseif (path=="index.html")   then if file.open(name..".gz","r") then buf=zip..file.read(2048) file.close() end
-elseif (path=="style.css")   then if file.open("style.css.gz","r") then buf=zip..file.read(2048) file.close() end
-elseif (path=="/push")       then
+elseif (path=="index.html") then if file.open(name..".gz","r") then buf=zip..file.read(2048) file.close() end
+elseif (path=="style.css")  then if file.open("style.css.gz","r") then buf=zip..file.read(2048) file.close() end
+elseif (path=="/push")      then
   if (vars ~= nil)then
     print(vars)
     file.open("conf.lua","w")
@@ -35,7 +35,7 @@ elseif (path=="/push")       then
     file.close()
     node.compile("conf.lua")
     tmr.alarm(1, 5000, tmr.ALARM_SINGLE, function()
-      print("kiri")
+      print("restart")
       node.restart()
     end)
   end
@@ -47,6 +47,6 @@ end)
 end)
 
 
-function apwifi(t) print("list wifi") _G.ap=t end
+function apwifi(t) print("[Setup] list wifi") _G.ap=t end
 wifi.sta.getap(apwifi)
 

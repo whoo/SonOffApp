@@ -1,22 +1,63 @@
-body { margin: 0 ; padding: 0 ; }
-* { font-family: Arial; font-size: 1em;}
-h1 {background-color: black; color: white; margin:0px; font-size: 1em; padding-top: 10px; padding-bottom: 10px; text-align:center;}
-input { margin-top: 5px; border-radius: 5px; padding: 5px; width: 80%;}
-html { margin: 0px ; }
-.styled-select { height: 29px; overflow: hidden; width: 240px; }
-.styled-select select { background: transparent; border: none; font-size: 14px; height: 29px; padding: 5px; /* If you add too much padding here, the options won't show in IE */ width: 268px; } 
-.styled-select.slate { margin-top: 10px; height: 34px; width: 85%; }
-.styled-select.slate select { border: 1px solid #ccc; font-size: 16px; height: 34px; width: 85%; } 
-button {
-	width: 90%;
-	background-color: #4CAF50; /* Green */
-	border: none;
-	color: white;
-	padding: 15px 32px;
-	text-align: center;
-	text-decoration: none;
-	display: inline-block;
-	font-size: 16px;
-	border-radius: 8px;
+* { font-family: Arial; }
+body { padding: 0px; margin: 0px;}
+h1 {background-color: black;
+background-image: linear-gradient(to right, black , white);
+color: white; margin:0px; padding: 20px;}
+
+
+input { margin-top: 10px; width: 80%;}
+input {
+	border: 2px solid black;
+	border-radius: 4px;
+	padding: 12px 20px;
+	background-color: #7BE;
+	color: back;
+	font-family: Arial;
 }
+.styled-select {
+   height: 29px;
+   overflow: hidden;
+   width: 240px;
+}
+.styled-select select {
+   background: transparent;
+   border: none;
+   font-size: 14px;
+   height: 29px;
+   padding: 5px; /* If you add too much padding here, the options won't show in IE */
+   width: 268px;
+}
+.styled-select.slate {
+   margin-top: 10px;
+   height: 34px;
+   width: 90%;
+}
+.styled-select.slate select {
+   border: 1px solid #ccc;
+   font-size: 16px;
+   height: 34px;
+   width: 100%;
+}
+
+button {
+background-color: #4C7F50; /* Green */
+border: none;
+color: white;
+text-align: center;
+text-decoration: none;
+display: inline-block;
+font-size: 16px;
+border-radius: 8px;
+width: 90%;
+height: 40px;
+margin: 0px auto 0px auto;
+left: 20px;
+ background-image: linear-gradient(to bottom right, #4C7F50, #4C3F30);
+}
+
 #ok { display: none;}
+
+fieldset {
+width: 90%;
+margin: 20px auto 5px auto;
+}
