@@ -1,0 +1,4 @@
+_G.SSID="wifi"
+_G.PASSWIFI="***"
+_G.NAME="sonoff"
+_G.MOSQUITO="****"
