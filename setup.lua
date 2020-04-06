@@ -28,7 +28,7 @@ wifi.setmode(wifi.STATIONAP)
 mac=string.gsub(wifi.sta.getmac(),":",""):sub(-6)
 dhcp_config ={}
 dhcp_config.start = "192.168.4.5"
-wifi.ap.config({ssid="NewESP_"..mac,auth=wifi.OPEN})
+wifi.ap.config({ssid="NewESP_"..mac,auth=wifi.OPEN,save=false})
 wifi.ap.dhcp.config(dhcp_config)
 wifi.ap.dhcp.start()
 _G.srv=net.createServer(net.TCP,180)
