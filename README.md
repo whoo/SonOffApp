@@ -18,13 +18,13 @@ D'ont forget to tweak in app/include/user_modules.h.
   * GND
   * (GPIO14)
 
-![img](https://i0.wp.com/randomnerdtutorials.com/wp-content/uploads/2016/11/sonoff_gpio-r.jpg?w=750)
-
-* esptool.py write_flash -fm qio 0x00000 kernel.bin
-* esptool.py write_flash --flash_mode dout -fs 8m 0x0 nodemcu_float_master_20200406-0025.bin
-
 
 * Push button to enable flash mode when you connect USB plug until flash process starts.
+> esptool.py write_flash -fm qio 0x00000 kernel.bin
+> esptool.py write_flash --flash_mode dout -fs 8m 0x0 nodemcu_float_master_20200406-0025.bin
+
+![img](https://i0.wp.com/randomnerdtutorials.com/wp-content/uploads/2016/11/sonoff_gpio-r.jpg?w=750)
+
 
 ## Setup your environnement
 (*no friendly setup for now*)
