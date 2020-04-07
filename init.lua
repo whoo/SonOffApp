@@ -21,45 +21,39 @@ _G.Bpress=0
 _G.MqttStatus=0
 _G.config=0
 
-pwm.setup(GPIO_led, 4, 512)
-pwm.start(GPIO_led)
-
 
 function switch(elm)
--- print(gpio.read(elm))
- if (gpio.read(elm)==gpio.HIGH)
- then
-    gpio.write(elm,gpio.LOW)
-    if _G.MqttStatus==1 then     mqtt:publish(_G.NAME.."/relais","on",0,1) end
- else
-    gpio.write(elm,gpio.HIGH)
-    if _G.MqttStatus==1 then     mqtt:publish(_G.NAME.."/relais","off",0,1) end
- end
+ if (gpio.read(elm)==gpio.HIGH) then seton() else setoff() end
 end
 
 function seton()
-   elm=GPIO_relais
-   gpio.write(elm,gpio.LOW)
+   gpio.write(GPIO_relais,gpio.LOW)
    if _G.MqttStatus==1 then     mqtt:publish(_G.NAME.."/relais","on",0,1) end
 
 end
 
 function setoff()
-   elm=GPIO_relais
-   gpio.write(elm,gpio.HIGH)
-   print("set off")
+   gpio.write(GPIO_relais,gpio.HIGH)
    if _G.MqttStatus==1 then     mqtt:publish(_G.NAME.."/relais","off",0,1) end
-
 end
 
 function getRelais()
-      elm=GPIO_relais
-      if gpio.read(elm) ==gpio.HIGH
-      then
-      if _G.MqttStatus==1 then     mqtt:publish(_G.NAME.."/relais","off",0,1) end
-      else
-      if _G.MqttStatus==1 then     mqtt:publish(_G.NAME.."/relais","off",0,1) end
-      end
+      local s
+print(gpio.read(GPIO_relais))
+      if gpio.read(GPIO_relais) ==gpio.HIGH
+      then s="on" else s="off" end
+      if _G.MqttStatus==1 then     mqtt:publish(_G.NAME.."/relais",s,0,1) end
+end
+
+function erase()
+    file.remove('conf.lc')
+    if _G.MqttStatus==1 then     mqtt:publish(_G.NAME.."/status","clear conf",0,0) end
+	tmr.create():alarm(5000, tmr.ALARM_SINGLE, function() 
+		      print("Clear Wifi and restart")
+		      wifi.sta.clearconfig()
+		      node.restart()
+	    end)
+
 end
 
 
@@ -67,19 +61,17 @@ gpio.trig(GPIO0, "both",function(level)
 	  local Npress=0
 	  if (level==0) then
 	    _G.Bpress=tmr.now()
-	    pwm.setup(GPIO_led, 3, 500)
+	    pwm.setup(GPIO_led, 1, 500)
 	    pwm.start(GPIO_led)
---	    print("press")
 	  end
 
 	  if (level==1) then
 	    Npress=(tmr.now()-_G.Bpress)/1000
 	    pwm.stop(GPIO_led)
 	    pwm.close(GPIO_led)
---	    print(Npress)
             gpio.write(GPIO_led,1)
-	--    if (Npress>10000) then erase() end
-	    if (Npress>50) then switch(GPIO_relais) end
+	    if (Npress>10000) then   erase() 
+        elseif (Npress>50) then switch(GPIO_relais) end
 	  end
 	end
 )
@@ -114,10 +106,17 @@ then
  cfg.ssid=_G.SSID
  cfg.pwd=_G.PASSWIFI
  cfg.save=true
+
+
  
  _G.config=1
   wifi.sta.sethostname(_G.NAME)
   wifi.sta.config(cfg)
+
+pwm.setup(GPIO_led, 4,500)
+pwm.start(GPIO_led)
+
+
 
   mqtt = mqtt.Client(_G.NAME,120)
   mqtt:lwt(_G.NAME.."/relais","off",0,0)
@@ -133,15 +132,13 @@ function do_mqtt_connect()
    file.remove('conf.lc')
    node.restart()
  end
-print("Config " .. _G.config)
+
 if (_G.config == 1) then 
 	 mqtt:connect(_G.MOSQUITO,_G.PORT ,false, function(client)
-				   print("connected")
 				   client:publish(_G.NAME.."/status","online (".._G.BoRe..")",0,0)
 				   client:subscribe({[_G.NAME.."/set"]=0, 
 				   		     [_G.NAME.."/countdown"]=0,
 						     [_G.NAME.."/reboot"]=0})
-
 				   timesync()
  			          _G.MqttStatus=1
                                   getRelais()
@@ -152,11 +149,11 @@ end
 
 
 mqtt:on("message", function(client, topic, data)
---  print(topic .. ":" )
   if data ~= nil then
---   print(data)
-
-   if topic == _G.NAME.."/set" then switch(GPIO_relais) end
+   if topic == _G.NAME.."/set" then 
+	value=tonumber(data)
+	if value == 1 then seton() else setoff() end
+	end
    if topic == _G.NAME.."/countdown" then
    	local _,_,count,action=string.find(data,"([0-9]*);([a-z]*)")
 	if (action) then
@@ -165,11 +162,8 @@ mqtt:on("message", function(client, topic, data)
            if action=="off" then  tmr.create():alarm(val,tmr.ALARM_SINGLE,setoff) end
            if action=="on" then  tmr.create():alarm(val,tmr.ALARM_SINGLE,seton) end
 	end
-
    end
-
    if topic == _G.NAME.."/reboot" then node.restart() end
-
   end
 end)
 
@@ -191,7 +185,7 @@ function do_mqtt_connect()
 print("err")
 end
 wifi.sta.clearconfig()
-
+gpio.write(GPIO_led,gpio.LOW)
 dofile('setup.lc')
 print("no conf")
 end
